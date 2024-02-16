@@ -14,7 +14,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Step 4: Install Requirements
-pip install -r requirements.txt
+pip install -r utils/requirements.txt
 
 # Optional: Setup Gunicorn to serve the app and Nginx as a reverse proxy
 #pip install gunicorn
