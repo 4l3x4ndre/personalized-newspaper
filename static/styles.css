@@ -1,0 +1,77 @@
+:root {
+  --primary-color: #588157;
+  --secondary-color: #344e41;
+	--background-color: #dad7cd;
+	--error-color: #DC7757;
+  --font-stack: 'Helvetica Neue', sans-serif;
+  --base-padding: 1rem;
+}
+
+.card-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.card {
+	flex: 1 1 calc(33.333% - 20px); /* Subtract margin */
+	margin: 10px;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	padding: 20px;
+	box-sizing: border-box;
+	background-color: white;
+}
+
+/* For medium screens, 2 cards per line */
+@media (max-width: 800px) {
+	.card {
+		flex-basis: calc(50% - 20px); /* Subtract margin */
+	}
+}
+
+/* For small screens, 1 card per line */
+@media (max-width: 600px) {
+	.card {
+		flex-basis: calc(100% - 20px); /* Subtract margin */
+	}
+}
+a, input[type=submit] {
+	display: inline-block;
+	padding: 10px 10px;
+	margin: 4px;
+	background-color: var(--primary-color); /* Bootstrap primary button color */
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	border: none;
+	transition: background-color 0.3s, transform 0.2s;
+}
+/* Center body */
+body {
+	text-align: justify;
+	background-color: var(--background-color);
+
+}
+/* Add padding around buttons */
+form {
+	padding-bottom: 20px;
+}
+
+.article-text {
+	max-width: 400px; /* Typical width for optimal readability */
+	margin: auto; /* Centers the text block horizontally */
+	padding: 20px; /* Adds some padding inside the text block */
+	font-size: 20px;
+}
+.header {
+	text-align: center; /* Centers the text */
+}
+
+.error {
+	background-color: var(--error-color);
+}
+
+.center {
+	text-align: center;
+}

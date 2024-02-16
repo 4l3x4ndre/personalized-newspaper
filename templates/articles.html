@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article List</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+<body>
+
+
+<div class="container mt-5">
+<a href="/" class="btn btn-primary">Return to Home</a>
+
+    <h2>Articles:</h2>
+    <div class="card-container">
+        {% for article, similarity in articles %}
+        <!--div class="col-md-4 mb-4"-->
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h2 class="center card-title">{{ article['title'] }}</h2>
+                    <a href="{{ url_for('article', article_id=loop.index) }}" class="">Read More</a>
+                    <a href="{{ url_for('save_article', article_id=loop.index) }}" class="">Save article</a>
+                    <a href="{{ url_for('unsave_article', article_id=loop.index) }}" class="error">Unsave article</a>
+							<p>Similarity: {{ similarity }}</p>
+							<p>Source: {{ article['source'] }}</p>
+                </div>
+            </div>
+        <!--/div-->
+        {% endfor %}
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+Why does Apple make it so hard to share the Vision Pro?,https://www.theverge.com/2024/2/16/24058318/apple-vision-pro-sharing-difficulties,"Shortly before The Verge published its review of the Apple Vision Pro, I put it on to sit for some photos. The review unit had been fitted for our editor-in-chief Nilay Patel, but I’d worn it a few times as a guest and had a surprisingly good experience. That afternoon, though, I foolishly decided to skip the typical guest setup, which involves about a minute of calibration for the Vision Pro’s eye-tracking cameras. I put the thing on, and it didn’t work at all.
+
+The Vision Pro’s cameras, I quickly realized, were expecting somebody else’s eyes. The cursor darted around wildly or refused to move. It wasn’t an unexpected outcome, but it drove home an inconvenient fact: not only would I need to go through the setup again, I’d need to do it every time I wanted to use the headset.
+
+As The Verge has covered the Vision Pro’s release, we’ve run into multiple ways that Apple hamstrings device sharing, from not supporting multiple accounts to making the process of buying extra parts a pain. This isn’t just a computer you use alone, it’s apparently one you own alone — for reasons that seem unnecessary at best and user-unfriendly at worst.
+
+Despite its solitary reputation, the Vision Pro has obvious multiuser appeal
+
+To set the stage here, I want to make a slightly counterintuitive claim: the Vision Pro, despite its solitary reputation, feels built for sharing. In its bulky, expensive first-generation form, it isn’t something most people will want to wear or carry around all day. Its clearest use is either as a special-purpose tool for tasks like 3D design, or as a personal entertainment device, like a virtual TV set-top box or game console. These are exactly the kinds of products that might often be used by one person at a time, but tend to be owned across a household — or workplace — and frequently passed around.
+
+The Vision Pro’s hardware facilitates this surprisingly well. Unlike some VR headsets, the device’s Solo Knit Band is adjusted with a single simple-to-use dial; there’s no need to change the sizing by readjusting awkward velcro straps. Changing the bands is also easy, if needed. It requires a light seal that’s fitted to your face — and there are a whopping 17 possible sizes — but that’s attached with a simple-to-swap magnetic snap. There’s even a simple biometric login option: the face-tracking cameras mounted inside.
+
+It’s easy to imagine a world where this translates into making the Vision Pro more valuable as a multiuser device. Like a lot of people, I tend to share electronics — my criteria for a good entertainment device include whether my husband will use it, too. I don’t see myself wearing the Vision Pro all day for work, but I could imagine putting one on for a couple of hours to play VR / AR games, then handing it off so he can watch TV on a virtual big screen after I fall asleep. Yet the Vision Pro feels designed to undermine that fantasy at every turn.
+
+The most obvious problem is the lack of multiple accounts or profiles. The Vision Pro allows precisely one person to have a permanent account tied to their Apple ID. That’s similar to the iPad and iPhone, but unlike nearly every other computing device in my household, from my Android phone to my MacBook to my husband’s humble Nintendo Switch. Even the Meta Quest system, which tied hardware to personal Facebook or Meta logins a few years ago, lets you swap between up to four accounts!
+
+On the iPhone, the single-user setup is annoying for privacy and customization reasons, but makes a good deal of sense. The lack of multiple user support on the iPad makes far less sense — we have complained about it for years — but at least some iPads are relatively inexpensive.
+
+This headset is $3,499 and only one person in a household can use it fully
+
+The Vision Pro is $3,499 and only one person in your household can ever use it fully, which makes no sense at all. The privacy issues are technically there on the Vision Pro — letting anyone else use it without setting restrictions in guest mode grants them access to everything you’ve got on the headset, including your messages. But as my experience demonstrates, they may not even be able to use it well enough to get that far. You can start a guest session by holding the Vision Pro’s left-side hardware button for four seconds, but you can’t store a second user’s information so they can log in quickly next time without calibration. Basically, imagine if every time you passed an iPad to somebody else in your family, they had to spend a minute poking colored dots.
+
+Then there’s the matter of getting an extra light seal. As I mentioned, I felt fine using a Vision Pro not fitted for me, but others have had problems. Verge product manager Parker Ortolani, for instance, found the Vision Pro with Nilay’s seal size too small and said it leaked light into his eyes. An extra seal costs $199, and you can only buy it one of two ways: ordering online and scanning your face with a Face ID-equipped iOS device, or going in person to an Apple Store and getting a scan done there. Verge video director Owen Grove tried the latter, and his experience wasn’t great.
+
+“I needed to set up an appointment for [a] demo I didn’t want to just buy an extra light seal,” Owen told me. He’d called beforehand to confirm the seals’ availability, only to discover after the half-hour demo that most were sold out, including his size, which the store told him to buy online instead. In general, not being able to simply buy a few different sizes and figure out what works best is inherently limiting for a single user — and makes it almost impossible to share with a few people in a family or workplace.
+
+Things get even more complicated if one or more potential users wears glasses, although this feels like more of an inherent inconvenience than a deliberate roadblock. The Vision Pro uses Zeiss-made prescription lens inserts, which require initial pairing with a passcode stored in Apple’s Health app or a physical card. On the bright side, the interface lets you store multiple lens pairings, so it doesn’t seem like you have to do this every time.
+
+Some of these annoyances might get ironed out over time, as Apple has removed other awkward Vision Pro design quirks with software updates. The company is clearly trying to familiarize people with a new class of computer, and right now that means controlling the experience as closely as possible. If the Vision Pro sees any level of success, things like the demo requirement could fade away. Apple may roll out more options specifically for business or education customers, too, like the Shared iPad feature that allows for some multiuser support.","['does', 'apple', 'device', 'share', 'verge', 'vision', 'store', 'pros', 'person', 'hard', 'pro', 'multiple', 'seal']",https://www.theverge.com,0.5352085485795588
+The existence of a new kind of magnetism has been confirmed,https://www.newscientist.com/article/2417255-the-existence-of-a-new-kind-of-magnetism-has-been-confirmed/,"Altermagnets, theorised to exist but never before seen, have been measured for the first time and they could help us make new types of magnetic computers
+
+Altermagnetism works differently from standard magnetism Libor Šmejkal and Anna Birk Hellenes
+
+A new kind of magnetism has been measured for the first time. Altermagnets, which contain a blend of properties from different classes of existing magnets, could be used to make high capacity and fast memory devices or new kinds of magnetic computers.
+
+Until the 20th century, there was thought to be only one kind of permanent magnet, a ferromagnet, the effects of which can be seen in objects with relatively strong external magnetic fields like fridge magnets or compass needles.
+
+Advertisement
+
+These fields are caused by the magnetic spins of the magnets’ electrons lining up in one direction.
+
+But, in the 1930s, French physicist Louis Néel discovered another kind of magnetism, called antiferromagnetism, where the electrons’ spins are alternately up and down. Although antiferromagnets lack the external fields of ferromagnets, they do show interesting internal magnetic properties because of the alternating spins.
+
+Then in 2019, researchers predicted a perplexing electric current in the crystal structure of certain antiferromagnets, called the anomalous Hall effect, which couldn’t be explained by the conventional theory of alternating spins. The current was moving without any external magnetic field.
+
+Sign up to our The Daily newsletter The latest science news delivered to your inbox, every day. Sign up to newsletter
+
+It seemed, when looking at a crystal in terms of sheets of spins, that a third kind of permanent magnetism might be responsible, which has been called altermagnetism. Altermagnets would look like antiferromagnets, but the sheets of spins would look the same when rotated from any angle. This would explain the Hall effect, but no one had seen the electronic signature of this structure itself, so scientists were unsure whether it was definitely a new kind of magnetism.
+
+Now, Juraj Krempasky at the Paul Scherrer Institute in Villigen, Switzerland, and his colleagues have confirmed the existence of an altermagnet by measuring the electron structure in a crystal, manganese telluride, that was previously thought to be antiferromagnetic.
+
+To do this, they gauged how light bounced off manganese telluride to find the energies and speeds of the electrons inside the crystal. After mapping out these electrons, they were found to almost exactly match the predictions given by simulations for an altermagnetic material.
+
+The electrons seemed to be split into two groups, which allows them more movement inside the crystal and is the source of the unusual altermagnetic properties. “This gave direct evidence that we can talk about altermagnets and that they behave exactly as predicted by theory,” says Krempasky.
+
+This electron grouping seems to come from the atoms of tellurium, which is non-magnetic, in the crystal structure, which separate the magnetic charges of the manganese into their own planes and allow the unusual rotational symmetry.
+
+“It’s really nice verification that these materials do exist,” says Richard Evans at the University of York, UK. As well as the electrons in altermagnets being freer to move than those in antiferromagnets, this new type of magnet also doesn’t have external magnetic fields like in ferromagnets, says Evans, so you can use them to make magnetic devices that don’t interfere with each other.
+
+The property could boost the storage on computer hard drives, because commercial devices contain ferromagnetic material that is so tightly packed that the material’s external magnetic fields start to see interference – altermagnets could be packed more densely.
+
+The magnets could even lead to spintronic computers that use magnetic spin instead of current to perform their measurements and calculations, says Joseph Barker at the University of Leeds, UK, combining memory and computer chips into one device. “It maybe gives more hope to the idea that we could make spintronic devices become a reality,” says Barker.
+
+Journal reference Nature DOI: 10.1038/s41586-023-06907-7","['altermagnets', 'crystal', 'spins', 'fields', 'external', 'confirmed', 'kind', 'electrons', 'magnetism', 'structure', 'magnetic', 'magnets', 'existence']",https://www.newscientist.com,0.6681548277528755

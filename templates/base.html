@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Save and Load Newspaper Sources</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+		<div class="center">
+    <h2>Enter Newspaper Source URL</h2>
+    <form action="/submit" method="post">
+        <input type="text" name="source_url" required>
+        <input type="submit" value="Add new source">
+    </form>
+    <br>
+    <form action="/load" method="get">
+        <input type="submit" value="Show sources">
+    </form>
+    <form action="/fetch" method="get">
+        <input type="submit" value="Fetch articles">
+    </form>
+	<form action="/build_sources" method="get">
+        <input type="submit" value="(re)Build sources">
+    </form>
+
+    <form action="/load_articles" method="get">
+        <input type="submit" value="Load Saved Articles">
+    </form>
+    <form action="/load_cached_articles" method="get">
+        <input type="submit" value="Load Cached Articles">
+    </form>
+
+			<form action="/save_articles" method="get">
+        <input type="submit" value="Save Articles">
+    </form>
+
+    {% if sources %}
+        <h2>Saved Sources:</h2>
+        <ul>
+        {% for source in sources %}
+            <li>{{ source }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if articles %}
+        <h2>Articles:</h2>
+        <ul>
+        {% for article, similarity in articles %}
+            <li>{{ article['title'] }} <a href = {{ article['url'] }}> {{article['url']}}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+	</div>
+</body>
+</html>
+

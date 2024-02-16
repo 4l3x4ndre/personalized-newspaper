@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Article List</title>
+			<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+
+	</head>
+	<body>
+		<div >
+			<a href="/load_cached_articles?" class="btn btn-primary">Return to Articles</a>
+			<a href="{{article['url']}}" class="btn btn-primary">Go to website</a>
+		</div>
+		<h2 class="header" >{{article['title']}}</h2>
+		<p class="article-text" >{{article['text']}}</p>
+	</body>
+</html>
+
