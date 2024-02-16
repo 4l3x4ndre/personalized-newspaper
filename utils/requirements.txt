@@ -1,3 +1,4 @@
 nltk
 numpy
-newspaper
+newspaper3k
+flask
