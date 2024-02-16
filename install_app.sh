@@ -4,8 +4,8 @@
 #cd /path/to/your-flask-app
 
 # Step 1: Update and Install Python3 & pip
-sudo apt-get update
-sudo apt-get install -y python3 python3-pip python3-venv
+apt-get update
+apt-get install -y python3 python3-pip python3-venv
 
 # Step 2: Setup Python Virtual Environment
 python3 -m venv venv
