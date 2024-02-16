@@ -16,6 +16,8 @@ source venv/bin/activate
 # Step 4: Install Requirements
 pip install -r utils/requirements.txt
 
+python -m pip install -U --pre 'urllib3>=2.0.0a1'
+
 # Optional: Setup Gunicorn to serve the app and Nginx as a reverse proxy
 #pip install gunicorn
 # For Nginx setup, you would need to configure it manually or add additional commands here
