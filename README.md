@@ -1,6 +1,6 @@
 # Personalized newspaper
 
-Fetch article from a list of newspaper and retrieve relevent article based on a reference keywords file. The reference keywords file is updated with keywords of saved articles. 
+Fetch article from a list of newspapers and retrieve relevent articles based on a reference keywords file. The reference keywords file is updated with keywords of saved articles. 
 
 Articles are fetched using the python library `newspaper3k`.
 
