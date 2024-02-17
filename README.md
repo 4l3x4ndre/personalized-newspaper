@@ -17,3 +17,5 @@ chmod +x ./install_app.sh
 ./install_app.sh
 ```
 
+---
+[favicon](https://www.flaticon.com/free-icons/paper)
