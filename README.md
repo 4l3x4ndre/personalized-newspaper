@@ -2,7 +2,7 @@
 
 Fetch article from a list of newspaper and retrieve relevent article based on a reference keywords file. The reference keywords file is updated with keywords of saved articles. 
 
-Articles are fetched using the python library newspaper3k.
+Articles are fetched using the python library `newspaper3k`.
 
 Word vectors are coming from http://vectors.nlpl.eu/repository with the ID 188.
 
