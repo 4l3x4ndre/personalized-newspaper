@@ -7,11 +7,13 @@ from fetch import get_ref_vector, build_sources, fetch_from_built_paper, get_bes
 MAIN_ARTICLES_FILE = 'articles.csv'
 CACHED_ARTICLES_FILE = 'articles_cached.csv'
 MAIN_SOURCES_FILE = 'sources.csv'
+MAIN_FORBIDDEN_SOURCES_FILE = 'forbidden_sources.csv'
 REF_DOC_FILE = 'utils/ref_document.txt'
 
 
 app = Flask(__name__)
 sources = []
+forbidden_sources = []
 articles = []
 built_papers = []
 built_sources = []
@@ -25,6 +27,14 @@ def read_sources():
         reader = csv.reader(csvfile)
         sources = [row[0] for row in reader]
     return sources
+
+def read_forbidden_sources():
+    global forbidden_sources
+    forbidden_sources = []
+    with open(MAIN_FORBIDDEN_SOURCES_FILE, 'r', newline='\n') as csvfile:
+        reader = csv.reader(csvfile)
+        forbidden_sources = [row[0] for row in reader]
+    return forbidden_sources
 
 
 def save_articles_to_csv(filename, _articles, mode='a'):
@@ -99,15 +109,29 @@ def submit():
     with open(MAIN_SOURCES_FILE, 'a', newline='\n') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow([source_url])
-    
-    return render_template("base.html", sources=sources)
+
+    global sources, forbidden_sources
+    sources = read_sources()
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+
+@app.route('/submit_forbidden', methods=['POST'])
+def submit_forbidden():
+    forbidden = request.form['forbidden_source_url']
+    with open(MAIN_FORBIDDEN_SOURCES_FILE, 'a', newline='\n') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([forbidden])
+
+    global forbidden_sources
+    forbidden_sources = read_forbidden_sources()
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
 
 
 @app.route('/load', methods=['GET'])
 def load():
-    global sources
+    global sources, forbidden_sources
     sources = read_sources()
-    return render_template("base.html", sources=sources)
+    forbidden_sources = read_forbidden_sources()
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
 
 
 @app.route('/fetch', methods=['GET'])
@@ -125,7 +149,7 @@ def fetch():
 
     for paper in papers:
         print(f"Fetching articles from {paper.url}")
-        articles = articles + fetch_from_built_paper(paper, limit=5)
+        articles = articles + fetch_from_built_paper(paper, forbidden_sources=forbidden_sources, limit=5)
 
     selected_articles = get_best_articles(articles, ref_vector, word_vectors)
 
@@ -194,6 +218,36 @@ def unsave_article(article_id):
     else:
         return "Article not found", 404
 
+@app.route('/remove_source/<int:source_id>')
+def remove_source(source_id):
+    global sources
+    if 0 < source_id <= len(sources):
+        source = sources[source_id-1]
+        with open(MAIN_SOURCES_FILE, 'w', newline='\n') as csvfile:
+            writer = csv.writer(csvfile)
+            for source_url in sources:
+                if source_url != source:
+                    writer.writerow([source_url])
+        sources = read_sources()
+        return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+    else:
+        return "Source not found", 404
+
+@app.route('/remove_forbidden_source/<int:source_id>')
+def remove_forbidden_source(source_id):
+    # rewrite
+    global forbidden_sources
+    if 0 < source_id <= len(forbidden_sources):
+        source = forbidden_sources[source_id-1]
+        with open(MAIN_FORBIDDEN_SOURCES_FILE, 'w', newline='\n') as csvfile:
+            writer = csv.writer(csvfile)
+            for source_url in forbidden_sources:
+                if source_url != source:
+                    writer.writerow([source_url])
+        forbidden_sources = read_forbidden_sources()
+        return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+    else:
+        return "Source not found", 404
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

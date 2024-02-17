@@ -106,7 +106,7 @@ def fetch_from_source(source_url, limit=5):
     return articles
 
 
-def fetch_from_built_paper(paper, limit=5):
+def fetch_from_built_paper(paper, forbidden_sources, limit=5):
     articles = []
     titles = []
     counter = 0
@@ -114,13 +114,17 @@ def fetch_from_built_paper(paper, limit=5):
         if counter >= limit:
             break
         try:
-            article_data = fetch_article(article.url)
-            if not article_data['title'] in titles:
-                titles.append(article_data['title'])
-                articles.append(article_data)
-                counter += 1
+            if not any(article.url.startswith(s) for s in forbidden_sources):
+                article_data = fetch_article(article.url)
+                if not article_data['title'] in titles:
+                    titles.append(article_data['title'])
+                    articles.append(article_data)
+                    counter += 1
+                else:
+                    print(f"    --- Article already in list")
+
             else:
-                print(f"    --- Article '{article_data['title']}' already in list")
+                print(f"    --- Article from forbidden source: {article.url}")
         except Exception as e:
             print(f"Failed to fetch article: {e}")
     return articles

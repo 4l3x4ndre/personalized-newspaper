@@ -75,3 +75,13 @@ form {
 .center {
 	text-align: center;
 }
+
+ul {
+	list-style-type: none; /* Removes bullet points */
+	padding: 0; /* Removes default padding */
+	text-align:center; /* Centers the text */
+	list-style-position:inside;
+}
+
+
+

@@ -13,6 +13,11 @@
         <input type="text" name="source_url" required>
         <input type="submit" value="Add new source">
     </form>
+	<form action="/submit_forbidden" method="post">
+        <input type="text" name="forbidden_source_url" required>
+        <input class="error" type="submit" value="Add new forbidden source">
+    </form>
+
     <br>
     <form action="/load" method="get">
         <input type="submit" value="Show sources">
@@ -39,10 +44,26 @@
         <h2>Saved Sources:</h2>
         <ul>
         {% for source in sources %}
-            <li>{{ source }}</li>
+		<li>
+			{{ source }}
+			<a class="error" href={{url_for('remove_source', source_id=loop.index)}}>delete</a>
+		</li>
         {% endfor %}
         </ul>
     {% endif %}
+
+    {% if forbidden_sources %}
+	<h2>Forbidden Sources:</h2>
+	<ul>
+	{% for source in forbidden_sources %}
+		<li>
+			{{ source }}
+			<a class="error" ref={{url_for('remove_forbidden_source', source_id=loop.index)}}>delete</a>
+		</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+
     
     {% if articles %}
         <h2>Articles:</h2>
