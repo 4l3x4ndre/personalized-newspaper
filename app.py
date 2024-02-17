@@ -149,7 +149,7 @@ def fetch():
 
     for paper in papers:
         print(f"Fetching articles from {paper.url}")
-        articles = articles + fetch_from_built_paper(paper, forbidden_sources=forbidden_sources, limit=5)
+        articles = articles + fetch_from_built_paper(paper, forbidden_sources=forbidden_sources, limit=10)
 
     selected_articles = get_best_articles(articles, ref_vector, word_vectors)
 
