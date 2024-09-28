@@ -1,5 +1,7 @@
 # Personalized newspaper
 
+![client screenshot](https://github.com/4l3x4ndre/personalized-newspaper/blob/main/static/screenshot.png)
+
 Fetch article from a list of newspapers and retrieve relevent articles based on a reference keywords file. The reference keywords file is updated with keywords of saved articles. 
 
 Articles are fetched using the python library `newspaper3k`.
@@ -19,3 +21,5 @@ chmod +x ./install_app.sh
 
 ---
 [favicon](https://www.flaticon.com/free-icons/paper)
+
+[css style inspiration](https://codepen.io/silkine/pen/QWBxVX)
