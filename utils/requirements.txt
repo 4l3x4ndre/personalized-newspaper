@@ -2,3 +2,6 @@ nltk
 numpy
 newspaper3k
 flask
+lxml_html_clean
+requests
+APScheduler

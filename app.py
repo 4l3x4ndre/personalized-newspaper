@@ -1,7 +1,12 @@
 from flask import Flask, request, render_template, redirect, url_for
 import csv
 from fetch import get_ref_vector, build_sources, fetch_from_built_paper, get_best_articles, get_word_vectors
+import os # load api keys
+import requests # request weeather
 
+# Job: 
+from apscheduler.schedulers.background import BackgroundScheduler
+from pytz import timezone
 
 # Constants
 MAIN_ARTICLES_FILE = 'articles.csv'
@@ -9,6 +14,7 @@ CACHED_ARTICLES_FILE = 'articles_cached.csv'
 MAIN_SOURCES_FILE = 'sources.csv'
 MAIN_FORBIDDEN_SOURCES_FILE = 'forbidden_sources.csv'
 REF_DOC_FILE = 'utils/ref_document.txt'
+OPEN_WEATHER_APIKEY = os.getenv('newworld_post_python')
 
 
 app = Flask(__name__)
@@ -19,6 +25,7 @@ built_papers = []
 built_sources = []
 ref_vector = []
 word_vectors = []
+weather_data = []
 
 def read_sources():
     global sources
@@ -98,9 +105,89 @@ def remove_article_by_title(filename, article_title):
         writer.writerows(rows)
 
 
+def get_weather(city="Paris"):
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPEN_WEATHER_APIKEY}&units=metric' 
+    print(url)
+    response = requests.get(url)
+
+    global weather_data
+    
+    if response.status_code == 200:
+        data = response.json()
+        weather_data = {
+            'description': data['weather'][0]['description'].capitalize(),
+            'temperature': data['main']['temp'],
+            'humidity': data['main']['humidity'],
+            'wind_speed': data['wind']['speed'],
+            'city':city
+        }
+        return weather_data
+    else:
+        return None
+
+
+# ---------------------- Job ------------------------
+# Job to run the `fetch` function every day at 7am
+def fetch_articles_job():
+    """
+    Job to run the `fetch` function every day at 7am
+    """
+    global built_papers, built_sources, forbidden_sources, articles, ref_vector, word_vectors
+
+    # 1. Rebuild sources objects
+    built_papers = build_sources(read_sources(), [], [])
+    built_sources = sources
+    forbidden_sources = read_forbidden_sources()
+
+    # 2. Fetch their article
+    articles = []
+    
+    if len(word_vectors) == 0: word_vectors = get_word_vectors()
+    if len(ref_vector) == 0: ref_vector = get_ref_vector(word_vectors)
+
+
+    for paper in built_papers:
+        print(f"Fetching articles from {paper.url}")
+        articles = articles + fetch_from_built_paper(paper, forbidden_sources=forbidden_sources, limit=10)
+
+    selected_articles = get_best_articles(articles, ref_vector, word_vectors)
+    articles = selected_articles
+    save_articles_to_csv(CACHED_ARTICLES_FILE, articles, 'w')
+
+    print("Articles fetched successfully at 7am.")
+    #return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
+
+
+# Initialize APScheduler
+scheduler = BackgroundScheduler()
+
+# Schedule the fetch_articles_job to run every day at 7am
+scheduler.add_job(fetch_articles_job, 'cron', hour=7, minute=0, timezone='Europe/Vienna')
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+@app.before_request
+def initialize_scheduler():
+    if not scheduler.running:
+        scheduler.start()
+
+@app.teardown_appcontext
+def shutdown_scheduler(exception=None):
+    scheduler.shutdown()
+
+
+
+# ----------------------------- WEB ROUTING -----------------------------
+
 @app.route('/')
 def index():
-    return render_template("base.html", sources=[])
+    global sources, forbidden_sources
+    sources = read_sources()
+    forbidden_sources = read_forbidden_sources()
+
+    weather_data = get_weather("Paris")
+
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/submit', methods=['POST'])
@@ -112,7 +199,7 @@ def submit():
 
     global sources, forbidden_sources
     sources = read_sources()
-    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 @app.route('/submit_forbidden', methods=['POST'])
 def submit_forbidden():
@@ -123,7 +210,7 @@ def submit_forbidden():
 
     global forbidden_sources
     forbidden_sources = read_forbidden_sources()
-    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/load', methods=['GET'])
@@ -131,12 +218,23 @@ def load():
     global sources, forbidden_sources
     sources = read_sources()
     forbidden_sources = read_forbidden_sources()
-    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/fetch', methods=['GET'])
 def fetch():
-    global articles, built_papers, built_sources, ref_vector, word_vectors
+    fetch_articles_job()
+    return "Articles fetched manually!", 200
+
+
+
+    # 1. Rebuild sources objects
+    global built_papers, built_sources
+    built_papers = build_sources(read_sources(), [], [])
+    built_sources = sources
+
+    # 2. Fetch their article
+    global articles, ref_vector, word_vectors
     articles = []
     
     papers = build_sources(sources=read_sources(), built_sources=built_sources, built_papers=built_papers)
@@ -156,7 +254,7 @@ def fetch():
     articles = selected_articles
     save_articles_to_csv(CACHED_ARTICLES_FILE, articles, 'w')
 
-    return render_template("articles.html", articles=articles)
+    return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/load_articles', methods=['GET'])
@@ -164,13 +262,14 @@ def load_articles():
     global articles
     articles = read_articles(MAIN_ARTICLES_FILE)
     
-    return render_template("articles.html", articles=articles)
+    return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/load_cached_articles', methods=['GET'])
 def load_cached_articles():
     _articles = read_articles(CACHED_ARTICLES_FILE)
-    return render_template("articles.html", articles=_articles)
+    weather_data = get_weather("Paris")
+    return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 
@@ -179,13 +278,13 @@ def page_build_sources():
     global built_papers, built_sources
     built_papers = build_sources(read_sources(), [], [])
     built_sources = sources
-    return render_template("base.html", sources=sources)
+    return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/save_articles', methods=['GET'])
 def save_articles():
     save_articles_to_csv("articles.csv", articles)
-    return render_template("base.html", articles=articles)
+    return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
 @app.route('/article/<int:article_id>')
@@ -194,7 +293,7 @@ def article(article_id):
     print(f"There are {len(articles)} articles in cache.")
     save_articles_to_csv(CACHED_ARTICLES_FILE, articles, 'w')
     if 0 < article_id <= len(articles):
-        return render_template('text_article.html', article=articles[article_id-1][0])
+        return render_template('text_article.html', article=articles[article_id-1][0], weather=weather_data)
     else:
         return "Article not found", 404
 
@@ -203,7 +302,7 @@ def save_article(article_id):
     global articles
     if len(articles) > 0:
         save_articles_to_csv(MAIN_ARTICLES_FILE, [articles[article_id-1]])
-        return render_template("articles.html", articles=articles)
+        return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
     else:
         return "No article in cache", 404
  
@@ -214,7 +313,7 @@ def unsave_article(article_id):
     if 0 < article_id <= len(articles):
         remove_article_by_title(MAIN_ARTICLES_FILE, articles[article_id-1][0]['title'])
         articles = read_articles(MAIN_ARTICLES_FILE)
-        return render_template("articles.html", articles=articles)
+        return render_template("articles.html", articles=articles, weather=weather_data)
     else:
         return "Article not found", 404
 
@@ -229,7 +328,7 @@ def remove_source(source_id):
                 if source_url != source:
                     writer.writerow([source_url])
         sources = read_sources()
-        return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+        return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
     else:
         return "Source not found", 404
 
@@ -245,7 +344,7 @@ def remove_forbidden_source(source_id):
                 if source_url != source:
                     writer.writerow([source_url])
         forbidden_sources = read_forbidden_sources()
-        return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources)
+        return render_template("base.html", sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
     else:
         return "Source not found", 404
 

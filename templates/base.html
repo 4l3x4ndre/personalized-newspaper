@@ -1,44 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Save and Load Newspaper Sources</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-		<link rel="icon" type="image/png" href="{{url_for('static', filename='newspaper.png')}}">
+    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='newspaper.png')}}">
+    <title>NewsWorld Post</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
 
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+	}</style>
 </head>
 <body>
-		<div class="center">
-    <h2>Enter Newspaper Source URL</h2>
-    <form action="/submit" method="post">
-        <input type="text" name="source_url" required>
-        <input type="submit" value="Add new source">
-    </form>
-	<form action="/submit_forbidden" method="post">
-        <input type="text" name="forbidden_source_url" required>
-        <input class="error" type="submit" value="Add new forbidden source">
-    </form>
+<div class="head">
+    <div class="headerobjectswrapper">
+        <div class="weatherforcastbox">
+		<span style="font-style: italic;">
+			{% if weather %}
+						Weather Forecast for {{weather.city}}:
+			    <br>
+			{{ weather.description }}; Temp: {{ weather.temperature }}°C;
+			<br>
+			Wind: {{ weather.wind_speed }} km/h; Hum: {{ weather.humidity }}%
+			{% else %}
+			    Weather data is unavailable.
+			{% endif %}
+	    </span>
+	</div>
+        <header>NewWorld Post</header>
+    </div>
+    <div class="subhead"> {{ sources|length }} Sources - {{ forbidden_sources|length }} Forbidden</div>
+</div>
 
-    <br>
-    <form action="/load" method="get">
-        <input type="submit" value="Show sources">
-    </form>
-    <form action="/fetch" method="get">
-        <input type="submit" value="Fetch articles">
-    </form>
-	<form action="/build_sources" method="get">
-        <input type="submit" value="(re)Build sources">
-    </form>
+<!-- Button Section (Horizontally aligned buttons as subheading) -->
+<div class="subhead">
+    <div class="buttons-container">
+        <!--button class="styled-button" onclick="location.href='{{ url_for('submit') }}'">Submit Source</button-->
+        <button class="styled-button" onclick="location.href='{{ url_for('fetch') }}'">Fetch Articles</button>
+	<button class="styled-button" id="openModalBtn">Submit Source</button>
+	<button class="styled-button" id="openModalBtn_forbid">Submit Forbidden Source</button>
+        <button class="styled-button" onclick="location.href='{{ url_for('load') }}'">Load Sources</button>
+        <button class="styled-button" onclick="location.href='{{ url_for('load_articles') }}'">Load Articles</button>
+        <button class="styled-button" onclick="location.href='{{ url_for('load_cached_articles') }}'">Load Cached Articles</button>
+    </div>
+</div>
 
-    <form action="/load_articles" method="get">
-        <input type="submit" value="Load Saved Articles">
+<!-- Modal for submitting source -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Add a Source</h2>
+    <form method="POST" action="{{ url_for('submit') }}">
+        <label for="source_url">Source URL:</label>
+        <input type="text" id="source_url" name="source_url" required>
+        <br><br>
+        <input type="submit" value="Submit">
     </form>
-    <form action="/load_cached_articles" method="get">
-        <input type="submit" value="Load Cached Articles">
-    </form>
+  </div>
+</div>
 
-			<form action="/save_articles" method="get">
-        <input type="submit" value="Save Articles">
+<!-- Modal for submitting forbidden source -->
+<div id="myModal_forbid" class="modal">
+  <div class="modal-content">
+    <span class="close_forbid">&times;</span>
+    <h2>Add a Forbidden Source</h2>
+    <form method="POST" action="{{ url_for('submit_forbidden') }}">
+        <label for="source_url">Source URL:</label>
+        <input type="text" id="forbidden_source_url_forbid" name="forbidden_source_url" required>
+        <br><br>
+        <input type="submit" value="Submit">
     </form>
+  </div>
+</div>
+
+<div class="content">
+    <div class="collumns">
+        {% if articles %}
+            {% for article, similarity in articles %}
+                <div class="collumn">
+                    <div class="head">
+                        <span class="headline hl3">{{ article['title'] }}</span>
+			<p><span class="headline hl4">Source: {{ article.source }}<br>Sim: {{similarity}}</span></p>
+                    </div>
+                    <a href="{{ article.url }}" target="_blank">Read more</a>
+                    <a href="{{ url_for('save_article', article_id=loop.index) }}" class="">Save article</a>
+                    <p>{{ article.text }}</p>
+                    <a href="{{ article.url }}" target="_blank">Read more</a>
+                    <a href="{{ url_for('save_article', article_id=loop.index) }}" class="">Save article</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No articles found.</p>
+        {% endif %}
+    </div>
+</div>
+
 
     {% if sources %}
         <h2>Saved Sources:</h2>
@@ -58,22 +147,71 @@
 	{% for source in forbidden_sources %}
 		<li>
 			{{ source }}
-			<a class="error" ref={{url_for('remove_forbidden_source', source_id=loop.index)}}>delete</a>
+			<a class="error" href={{url_for('remove_forbidden_source', source_id=loop.index)}}>delete</a>
 		</li>
 	{% endfor %}
 	</ul>
 	{% endif %}
 
-    
-    {% if articles %}
-        <h2>Articles:</h2>
-        <ul>
-        {% for article, similarity in articles %}
-            <li>{{ article['title'] }} <a href = {{ article['url'] }}> {{article['url']}}</a></li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-	</div>
+<script>
+
+    /* -------------- SOURCE -----------*/
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    /* -------------- Forbidden SOURCE -----------*/
+    // Get the modal
+    var modal_f = document.getElementById("myModal_forbid");
+
+    // Get the button that opens the modal
+    var btn_f = document.getElementById("openModalBtn_forbid");
+
+    // Get the <span> element that closes the modal
+    var span_f = document.getElementsByClassName("close_forbid")[0];
+
+    // When the user clicks the button, open the modal 
+    btn_f.onclick = function() {
+        modal_f.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span_f.onclick = function() {
+        modal_f.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal_f) {
+            modal_f.style.display = "none";
+        }
+    }
+
+</script>
+
+
 </body>
 </html>
 

@@ -165,7 +165,7 @@ def get_best_articles(articles, ref_vector, word_vectors):
         #similarity = nlp.compute_cosine_similarity(ref_vector, text_vector)
         similarity_kw = nlp.compute_cosine_similarity(ref_vector, keyword_vector)
         #print(f"   Similarity with article '{article['title']}': {similarity:.2f} (text) {similarity_kw:.2f} (keywords)")
-        selected_articles.append((article, similarity_kw))
+        selected_articles.append((article, round(similarity_kw, 2)))
     selected_articles.sort(key=lambda x: x[1], reverse=True)
     return selected_articles
 
