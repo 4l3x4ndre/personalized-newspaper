@@ -107,7 +107,6 @@ def remove_article_by_title(filename, article_title):
 
 def get_weather(city="Paris"):
     url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPEN_WEATHER_APIKEY}&units=metric' 
-    print(url)
     response = requests.get(url)
 
     global weather_data
@@ -224,17 +223,17 @@ def load():
 @app.route('/fetch', methods=['GET'])
 def fetch():
     fetch_articles_job()
-    return "Articles fetched manually!", 200
+    weather_data = get_weather("Paris")
+    return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
 
 
-
+    """
     # 1. Rebuild sources objects
-    global built_papers, built_sources
+    global built_papers, built_sources, articles, ref_vector, word_vectors
     built_papers = build_sources(read_sources(), [], [])
     built_sources = sources
 
     # 2. Fetch their article
-    global articles, ref_vector, word_vectors
     articles = []
     
     papers = build_sources(sources=read_sources(), built_sources=built_sources, built_papers=built_papers)
@@ -255,6 +254,7 @@ def fetch():
     save_articles_to_csv(CACHED_ARTICLES_FILE, articles, 'w')
 
     return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
+    """
 
 
 @app.route('/load_articles', methods=['GET'])

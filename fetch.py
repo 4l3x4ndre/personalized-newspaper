@@ -25,6 +25,9 @@ def fetch_article(url):
     article.parse()
     article.nlp()
 
+    #source =  article.url[:article.url.find('.com')]
+    source = article.url.strip("https://").replace('www.', '').replace('.com', '').replace('.org', '')
+    source = source[:source.find('/')]
 
     return {
         'title': article.title,
@@ -33,7 +36,7 @@ def fetch_article(url):
         'text': article.text,
         'keywords': article.keywords,
         'url': article.url,
-        'source': article.url[:article.url.find('.com')+4]
+        'source':source
     }
 
 
