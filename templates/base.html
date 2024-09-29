@@ -60,7 +60,11 @@
 			{% endif %}
 	    </span>
 	</div>
-        <header>NewWorld Post</header>
+        <header>
+                    <a href="{{ url_for('index')}}" class="invisible">
+				NewWorld Post
+			</a>
+	</header>
     </div>
     <div class="subhead"> {{ sources|length }} Sources - {{ forbidden_sources|length }} Forbidden</div>
 </div>
@@ -120,6 +124,7 @@
                     <p>{{ article.text }}</p>
                     <a href="{{ article.url }}" target="_blank">Read more</a>
                     <a href="{{ url_for('save_article', article_id=loop.index) }}" class="">Save article</a>
+		<a href="{{ url_for('unsave_article', article_id=loop.index) }}" class="error">Unsave article</a>
                 </div>
             {% endfor %}
         {% else %}

@@ -313,7 +313,7 @@ def unsave_article(article_id):
     if 0 < article_id <= len(articles):
         remove_article_by_title(MAIN_ARTICLES_FILE, articles[article_id-1][0]['title'])
         articles = read_articles(MAIN_ARTICLES_FILE)
-        return render_template("articles.html", articles=articles, weather=weather_data)
+        return render_template("base.html", articles=articles, sources=sources, forbidden_sources=forbidden_sources, weather=weather_data)
     else:
         return "Article not found", 404
 
